@@ -1,36 +1,36 @@
 import React, { useState } from "react";
 import "./userMenu.css";
 import CreateContext from "./menus/CreateContext";
-import VoteToAVote from "./menus/SubmitToSubject";
 import DisplayCreatedContexts from "./menus/DisplayCreatedContexts";
 import DisplayActionsHistory from "./menus/DisplayActionsHistory";
+import SubmitToSubject from "./menus/SubmitToSubject";
 
 const UserMenu = () => {
     const [activeMenu, setActiveMenu] = useState("main");
 
     const renderMenu = () => {
         switch (activeMenu) {
-            case "createVote":
+            case "createContext":
                 return <CreateContext />;
-            case "voteToAVote":
-                return <VoteToAVote />;
-            case "seeCreatedVotes":
+            case "submitToSubject":
+                return <SubmitToSubject />;
+            case "displayCreatedContexts":
                 return <DisplayCreatedContexts />;
-            case "seeVotesResults":
+            case "displayActionsHistory":
                 return <DisplayActionsHistory />;
             default:
                 return (
                     <div className="menu-list">
-                        <button onClick={() => setActiveMenu("createVote")} className="menu-item">
+                        <button onClick={() => setActiveMenu("createContext")} className="menu-item">
                             Créer un contexte
                         </button>
-                        <button onClick={() => setActiveMenu("voteToAVote")} className="menu-item">
+                        <button onClick={() => setActiveMenu("submitToSubject")} className="menu-item">
                             Choisir un sujet
                         </button>
-                        <button onClick={() => setActiveMenu("seeCreatedVotes")} className="menu-item">
+                        <button onClick={() => setActiveMenu("displayCreatedContexts")} className="menu-item">
                             Voir mes contextes
                         </button>
-                        <button onClick={() => setActiveMenu("seeVotesResults")} className="menu-item">
+                        <button onClick={() => setActiveMenu("displayActionsHistory")} className="menu-item">
                             Historique des choix
                         </button>
                     </div>

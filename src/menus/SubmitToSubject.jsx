@@ -2,25 +2,25 @@ import React, { useState } from "react";
 import {getContextById, getContextResults, selectSubject} from "../contracts/contract";
 
 const SubmitToSubject = () => {
-    const [voteId, setVoteId] = useState("");
-    const [voteData, setVoteData] = useState(null);
+    const [contextId, setContextId] = useState("");
+    const [contextData, setContextData] = useState(null);
     const [userSubject, setUserSubject] = useState("");
     const [error, setError] = useState("");
     const [results, setResults] = useState(null);
 
-    const handleVoteIdChange = (e) => {
-        setVoteId(e.target.value);
+    const handleContextIdChange = (e) => {
+        setContextId(e.target.value);
     };
 
-    const fetchVoteData = async () => {
+    const fetchContextData = async () => {
         try {
-            const response = await getContextById(voteId);
-            setVoteData(response);
-            const res = await getContextResults(voteId);
+            const response = await getContextById(contextId);
+            setContextData(response);
+            const res = await getContextResults(contextId);
             setResults(res);
         } catch (err) {
-            setError("Vote not found or there was an error fetching the data.");
-            setVoteData(null);
+            setError("Context not found or there was an error fetching the data.");
+            setContextData(null);
         }
     };
 
@@ -35,7 +35,7 @@ const SubmitToSubject = () => {
         }
 
         try {
-            const response = await selectSubject(voteId, userSubject);
+            const response = await selectSubject(contextId, userSubject);
             setError(response);
         } catch (err) {
             setError("Unknown error occurred, please try again.");
@@ -50,22 +50,22 @@ const SubmitToSubject = () => {
                     📊 <span>Choisir votre sujet</span>
                 </h1>
                 <p style={styles.subtitle}>
-                    Trouvez un vote par son ID et participez à la prise de décision !
+                    Trouvez un context par son ID et participez à la prise de décision !
                 </p>
             </header>
 
             <div style={styles.inputContainer}>
-                <label htmlFor="voteId" style={styles.label}>Entrer L'ID du contexte</label>
+                <label htmlFor="contextId" style={styles.label}>Entrer L'ID du contexte</label>
                 <div style={styles.inputGroup}>
                     <input
                         type="text"
-                        id="voteId"
-                        value={voteId}
-                        onChange={handleVoteIdChange}
+                        id="contextId"
+                        value={contextId}
+                        onChange={handleContextIdChange}
                         placeholder="ex: 1c01ae8f3"
                         style={styles.input}
                     />
-                    <button onClick={fetchVoteData} style={styles.button}>
+                    <button onClick={fetchContextData} style={styles.button}>
                         Entrer
                     </button>
                 </div>
@@ -83,16 +83,16 @@ const SubmitToSubject = () => {
                 </p>
             )}
 
-            {voteData && (
-                <div style={styles.voteDataContainer}>
-                    <div style={styles.voteHeader}>
-                        <h2 style={styles.voteTitle}>{voteData[1]}</h2>
-                        <p style={styles.voteId}>🆔 Vote ID: {voteData[0]}</p>
+            {contextData && (
+                <div style={styles.contextDataContainer}>
+                    <div style={styles.contextHeader}>
+                        <h2 style={styles.contextTitle}>{contextData[1]}</h2>
+                        <p style={styles.contextId}>🆔 Context ID: {contextData[0]}</p>
                     </div>
-                    <p style={styles.creatorInfo}>👤 Created by: {voteData[2]}</p>
+                    <p style={styles.creatorInfo}>👤 Created by: {contextData[2]}</p>
 
                     <div style={styles.subjectsContainer}>
-                        {voteData[3] && voteData[3].map((subject) => (
+                        {contextData[3] && contextData[3].map((subject) => (
                             <div key={subject} style={styles.subjectItem}>
                                 <input
                                     type="radio"
@@ -108,7 +108,7 @@ const SubmitToSubject = () => {
                     </div>
 
                     <button onClick={submitSubject} style={styles.submitButton}>
-                        ✅ Submit Your Vote
+                        ✅ Submit Your Context
                     </button>
 
                     {results && (
@@ -212,23 +212,23 @@ const styles = {
         textAlign: 'center',
         marginTop: '10px',
     },
-    voteDataContainer: {
+    contextDataContainer: {
         marginTop: '20px',
         padding: '20px',
         borderRadius: '8px',
         border: '1px solid #ddd',
         backgroundColor: '#f9f9f9',
     },
-    voteHeader: {
+    contextHeader: {
         textAlign: 'center',
         marginBottom: '20px',
     },
-    voteTitle: {
+    contextTitle: {
         fontSize: '22px',
         fontWeight: 'bold',
         color: '#333',
     },
-    voteId: {
+    contextId: {
         fontSize: '16px',
         color: '#777',
     },

@@ -27,7 +27,6 @@ const CreateContext = () => {
             });
             return;
         }
-        console.log("Vote Created:", {title, subjects});
         await createContext(title, subjects);
         toast.success('Contexte créé avec succès !');
     };

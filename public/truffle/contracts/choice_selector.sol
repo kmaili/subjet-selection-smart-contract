@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 contract SubjectSelector {
-    // Structure pour un contexte (anciennement vote)
+    // Structure pour un contexte (anciennement context)
     struct Context {
         string contextId;
         string title;
@@ -51,7 +51,7 @@ contract SubjectSelector {
         require(found, "context_not_found");
         require(context.active, "context_not_active");
         require(context.subjectExists[_subject], "invalid_subject");
-        require(bytes(context.userSubjects[msg.sender]).length == 0, "already_voted");
+        require(bytes(context.userSubjects[msg.sender]).length == 0, "already_contextd");
         require(!context.subjectTaken[_subject], "subject_already_taken");
 
         context.userSubjects[msg.sender] = _subject;

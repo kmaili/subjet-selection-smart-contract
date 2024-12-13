@@ -34,7 +34,7 @@ async function initializeContract() {
     }
     return contract;
 }
-// Fonction pour créer un contexte (anciennement vote)
+// Fonction pour créer un contexte (anciennement context)
 export async function createContext(title, subjects) {
     const contractInstance = await initializeContract();
     const tx = await contractInstance.createContext(title, subjects);
@@ -63,7 +63,7 @@ export async function selectSubject(contextId, subject) {
                 return  "Ce contexte n'est plus actif.";
             case "invalid_subject":
                 return  "Le sujet sélectionné n'est pas valide pour ce contexte.";
-            case "already_voted":
+            case "already_contextd":
                 return  "Vous avez déjà fait un choix pour ce contexte.";
             case "subject_already_taken":
                 return  "Ce sujet a déjà été sélectionné par un autre utilisateur.";
@@ -73,7 +73,7 @@ export async function selectSubject(contextId, subject) {
     }
 }
 
-// Fonction pour obtenir les résultats d'un contexte (anciennement vote)
+// Fonction pour obtenir les résultats d'un contexte (anciennement context)
 export async function getContextResults(contextId) {
     try {
         const contractInstance = await initializeContract();

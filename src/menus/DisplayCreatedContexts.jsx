@@ -3,28 +3,38 @@ import {getContextResults, getContextsByCreator} from "../contracts/contract";
 
 const DisplayCreatedContexts = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedVote, setSelectedVote] = useState(null);
+    const [selectedContext, setSelectedContext] = useState(null);
     const [results, setResults] = useState(null);
-    const [votes, setVotes] = useState([[], []]);
+    const [contexts, setContexts] = useState([[], []]);
+
+    const copyToClipboard = (id) => {
+        navigator.clipboard.writeText(id)
+            .then(() => {
+                alert("Copied to clipboard!");
+            })
+            .catch((error) => {
+                console.error("Failed to copy text to clipboard:", error);
+            });
+    };
 
     useEffect(() => {
-        const fetchVotes = async () => {
+        const fetchContexts = async () => {
             const response = await getContextsByCreator();
-            setVotes(response);
+            setContexts(response);
         };
-        fetchVotes();
+        fetchContexts();
     }, []);
 
-    const openModal = async (voteId, title) => {
-        const actualResults = await getContextResults(voteId);
+    const openModal = async (contextId, title) => {
+        const actualResults = await getContextResults(contextId);
         setResults(actualResults);
-        setSelectedVote(title);
+        setSelectedContext(title);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setSelectedVote(null);
+        setSelectedContext(null);
     };
 
     return (
@@ -36,17 +46,25 @@ const DisplayCreatedContexts = () => {
                 </p>
             </header>
 
-            <div style={styles.voteGrid}>
-                {votes[0].map((voteId, index) => (
+            <div style={styles.contextGrid}>
+                {contexts[0].map((contextId, index) => (
                     <div
-                        key={voteId}
-                        style={styles.voteSquare}
-                        onClick={() => openModal(voteId, votes[1][index])}
+                        key={contextId}
+                        style={styles.contextSquare}
+                        onDoubleClick={() => openModal(contextId, contexts[1][index])}
                     >
-                        <h3 style={styles.voteTitle}>{votes[1][index]}</h3>
-                        <p style={styles.voteId}>
-                            <span><img src={"./assets/id.png"} alt={"id"}/></span>
-                            <span>{voteId}</span>
+                        <h3 style={styles.contextTitle}>{contexts[1][index]}</h3>
+                        <p style={styles.contextId}>
+                            <span onClick={()=>copyToClipboard(contextId)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     className="bi bi-clipboard" viewBox="0 0 16 16">
+                                      <path
+                                          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                      <path
+                                          d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg>
+                            </span>
+                            <span>{contextId}</span>
                         </p>
                     </div>
                 ))}
@@ -55,7 +73,7 @@ const DisplayCreatedContexts = () => {
             {isModalOpen && (
                 <div style={styles.modalBackdrop}>
                     <div style={styles.modal}>
-                    <h3 style={styles.modalTitle}>{selectedVote} - Results</h3>
+                        <h3 style={styles.modalTitle}>{selectedContext} - Results</h3>
                         <table style={styles.table}>
                             <thead>
                             <tr>
@@ -108,14 +126,14 @@ const styles = {
         color: "#555",
         marginTop: "5px",
     },
-    voteGrid: {
+    contextGrid: {
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",
         gap: "20px",
         justifyContent: "center",
         marginTop: "20px",
     },
-    voteSquare: {
+    contextSquare: {
         padding: "20px",
         backgroundColor: "#007BFF",
         borderRadius: "8px",
@@ -128,7 +146,7 @@ const styles = {
         alignItems: "center",
         transition: "transform 0.3s",
     },
-    voteId: {
+    contextId: {
         backgroundColor: "#FFFFFF",
         padding: "15px",
         color: "#007BFF",
@@ -136,7 +154,7 @@ const styles = {
         display: "flex",
         gap: "5%"
     },
-    voteTitle: {
+    contextTitle: {
         fontSize: "20px",
         fontWeight: "bold",
         color: "#FFFFFF",
